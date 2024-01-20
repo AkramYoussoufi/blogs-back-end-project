@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String password;
     @Column(unique=true)
     private String email;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

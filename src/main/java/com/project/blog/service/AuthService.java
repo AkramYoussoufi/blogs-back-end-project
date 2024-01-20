@@ -32,6 +32,7 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final AuthenticationProvider authenticationProvider;
     private final UserDetailsServiceImp userDetailsServiceImp;
+    private final JWTService jwtService;
 
 
     public void signup(RegisterRequest registerRequest) {
@@ -44,14 +45,15 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public User authenticateUser(SignupRequest signupRequest) {
+    public String authenticateUser(SignupRequest signupRequest) {
             User user = userRepository.findByEmail(signupRequest.getEmail()).get();
             UserDetails userDetails = userDetailsServiceImp.loadUserByUsername(user.getUsername());
             Authentication authToken = new UsernamePasswordAuthenticationToken(userDetails, signupRequest.getPassword(), userDetails.getAuthorities());
             Authentication authentication = authenticationProvider.authenticate(authToken);
             if(authentication.isAuthenticated()){
-
+                return jwtService.generateToken(user.getId());
             }
-            return (User) authentication.getPrincipal();
+
+            return null;
     }
 }

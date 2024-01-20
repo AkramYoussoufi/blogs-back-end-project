@@ -2,11 +2,8 @@
 
     import com.project.blog.dto.RegisterRequest;
     import com.project.blog.dto.SignupRequest;
-    import com.project.blog.dto.SignupResponse;
-    import com.project.blog.model.User;
     import com.project.blog.service.AuthService;
     import lombok.AllArgsConstructor;
-    import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.PostMapping;
@@ -32,13 +29,10 @@
         }
 
         @PostMapping("/signup")
-        public ResponseEntity<SignupResponse> signin(@RequestBody SignupRequest signupRequest){
-            User user = authService.authenticateUser(signupRequest);
-            SignupResponse signupResponse = new SignupResponse(
-                     user.getId()
-                    ,user.getAuthorities()
-                    ,"Successfully Authenticated");
-
-            return new ResponseEntity<>(signupResponse,HttpStatus.OK);
+        public ResponseEntity<Map<String,String>> signin(@RequestBody SignupRequest signupRequest){
+            String token = authService.authenticateUser(signupRequest);
+            HashMap<String,String> response = new HashMap<>();
+            response.put("token",token);
+            return new ResponseEntity<>(response,HttpStatus.OK);
         }
     }
