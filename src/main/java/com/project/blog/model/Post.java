@@ -20,13 +20,13 @@ public class Post {
     @NotBlank
     private String title;
     @Lob
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     @NotEmpty
     private String content;
     @Column
-    private Instant createdOn;
+    private Instant createdOn = Instant.now();
     @Column
-    private Instant updatedOn;
+    private Instant updatedOn = Instant.now();
     @Column
     @NotBlank
     private String username;
